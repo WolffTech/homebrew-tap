@@ -1,0 +1,35 @@
+name: Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: macos-15
+    timeout-minutes: 20
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: "1"
+      HOMEBREW_NO_ANALYTICS: "1"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Register local tap
+        run: |
+          mkdir -p "$(brew --repository)/Library/Taps/wolfftech"
+          ln -s "$GITHUB_WORKSPACE" "$(brew --repository)/Library/Taps/wolfftech/homebrew-tap"
+      - name: Test updater
+        run: python3 -m unittest discover -s tests -v
+      - name: Check Ruby syntax
+        run: |
+          for cask in Casks/*.rb; do ruby -c "$cask"; done
+      - name: Homebrew style
+        run: brew style Casks/*.rb
+      - name: Homebrew audit
+        run: brew audit --cask --strict --tap=wolfftech/tap
