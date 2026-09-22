@@ -1,6 +1,6 @@
 cask "constellation" do
-  version "0.5.0"
-  sha256 "366565a5f503c6300bbc1ece8a98b73f9836a05a81b71f2d77d437b306dd9899"
+  version "0.9.0"
+  sha256 "74ee8b2b4bc7168d6b14383d744373a700fe2d4a5b4b353f0d34691b7c8559b1"
 
   url "https://github.com/WolffTech/constellation/releases/download/v#{version}/Constellation-#{version}.dmg"
   name "Constellation"
