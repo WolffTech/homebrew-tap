@@ -20,11 +20,11 @@ Open the apps from `/Applications`. Install NES Wallpaper's optional screensaver
 
 ## Updates
 
-Both apps update themselves through Sparkle. To update them through Homebrew, use `--greedy` to include self-updating apps:
+Both apps update themselves through Sparkle. Homebrew also upgrades them when the installed app is older than the cask version:
 
 ```sh
 brew update
-brew upgrade --cask --greedy wolfftech/tap/nes-wallpaper wolfftech/tap/constellation
+brew upgrade --cask wolfftech/tap/nes-wallpaper wolfftech/tap/constellation
 ```
 
 ## Uninstall and optional cleanup
