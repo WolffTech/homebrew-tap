@@ -37,7 +37,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 scripts/update_casks.py
-      # GITHUB_TOKEN PRs do not trigger pull_request workflows. Validate here too.
+      # PR checks on bot-opened PRs wait for manual approval. Validate here too.
       - name: Validate recipes
         env:
           HOMEBREW_GITHUB_API_TOKEN: ${{ github.token }}
@@ -46,16 +46,25 @@ jobs:
           brew style Casks/*.rb
           brew audit --cask --strict --online --tap=wolfftech/tap
           brew livecheck --cask --tap=wolfftech/tap
+      # Commit with git and open the PR with gh rather than a third-party action.
       - name: Open or update the release PR
-        uses: peter-evans/create-pull-request@22a9089034f40e5a961c8808d113e2c98fb63676 # v7
-        with:
-          branch: automation/update-casks
-          add-paths: Casks/*.rb
-          commit-message: "chore(casks): update stable releases"
-          title: "chore(casks): update stable releases"
-          body: |
-            Update casks from stable WolffTech GitHub Releases. SHA-256 values were calculated from the downloaded DMGs.
-
-            Before merging, inspect the new bundles for changes to architecture, minimum macOS, signing, notarization, and uninstall behavior. Run lifecycle tests in a disposable macOS environment.
-
-            This workflow validates syntax, style, audit, release discovery, and updater tests before opening the PR. GITHUB_TOKEN does not trigger the separate PR checks workflow.
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: automation/update-casks
+          TITLE: "chore(casks): update stable releases"
+        run: |
+          if git diff --quiet -- Casks; then
+            echo "Casks are current"
+            exit 0
+          fi
+          gh auth setup-git
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -C "$BRANCH"
+          git add Casks/*.rb
+          git commit -m "$TITLE"
+          git push --force origin "$BRANCH"
+          if [ "$(gh pr view "$BRANCH" --json state -q .state 2>/dev/null)" != OPEN ]; then
+            gh pr create --base "${{ github.event.repository.default_branch }}" --head "$BRANCH" \
+              --title "$TITLE" --body-file .github/update-casks-pr.md
+          fi
