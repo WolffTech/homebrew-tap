@@ -10,7 +10,7 @@ import sys
 from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
-APPS = {"nes-wallpaper": "NES-Wallpaper", "constellation": "Constellation"}
+APPS = {"nes-wallpaper": "NES-Wallpaper", "constellation": "Constellation", "barometry": "Barometry"}
 VERSION = re.compile(r"v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)")
 
 
@@ -97,7 +97,7 @@ def main():
             pending.append((path, updated))
         else:
             print(f'{repo}: current')
-    # Validate both downloads before writing either recipe.
+    # Validate every download before writing any recipe.
     for path, updated in pending:
         path.write_text(updated)
         print(f'{path.name}: updated')
