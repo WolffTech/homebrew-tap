@@ -1,6 +1,6 @@
 cask "barometry" do
-  version "1.1.0"
-  sha256 "a03c1372f7989ac69c24354a10f396a2d5568b9079e089bfc7ed49f9d5574668"
+  version "1.2.0"
+  sha256 "b1ceba6daf5a2202e1549354d6c5d2c07633660b8744c3da41b4070761beaace"
 
   url "https://github.com/WolffTech/barometry/releases/download/v#{version}/Barometry-#{version}.dmg"
   name "Barometry"
