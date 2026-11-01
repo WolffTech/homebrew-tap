@@ -24,6 +24,7 @@ jobs:
         run: |
           mkdir -p "$(brew --repository)/Library/Taps/wolfftech"
           ln -s "$GITHUB_WORKSPACE" "$(brew --repository)/Library/Taps/wolfftech/homebrew-tap"
+          brew trust wolfftech/tap
       - name: Test updater
         run: python3 -m unittest discover -s tests -v
       - name: Check Ruby syntax
