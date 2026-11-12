@@ -1,6 +1,6 @@
 cask "nes-wallpaper" do
-  version "1.2.0"
-  sha256 "8a3b564bd83fa73da8717d86a72d4d402434d5e8173bd93f6843c1f79329f6d4"
+  version "1.3.0"
+  sha256 "a2eddfb025e4b792f0d7826d7ea8b692308739b1df54d9dbbf1b951e45dca69f"
 
   url "https://github.com/WolffTech/nes-wallpaper/releases/download/v#{version}/NES-Wallpaper-#{version}.dmg"
   name "NES Wallpaper"
